@@ -41,5 +41,17 @@
                 </div>
             </div>
         </div>
+
+        <div class="col-12 col-md-4">
+            <div class="card h-100">
+                <div class="card-body d-flex flex-column">
+                    <h2 class="h5 card-title">Relatórios</h2>
+                    <p class="card-text text-muted flex-grow-1">
+                        Consulte livros agrupados por autor e exporte em PDF.
+                    </p>
+                    <a href="{{ route('relatorios.index') }}" class="btn btn-primary">Acessar</a>
+                </div>
+            </div>
+        </div>
     </div>
 @endsection

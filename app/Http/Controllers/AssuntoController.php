@@ -26,7 +26,7 @@ class AssuntoController extends Controller
     public function store(AssuntoRequest $request)
     {
         $this->assuntoService->createAssunto($request->validated());
-        return redirect()->route('assuntos.index');
+        return redirect()->route('assuntos.index')->with('success', 'Assunto cadastrado com sucesso.');
     }
 
     public function edit($id)
@@ -39,13 +39,13 @@ class AssuntoController extends Controller
     {
         $assunto = $this->assuntoService->getAssuntoById($id);
         $this->assuntoService->updateAssunto($assunto, $request->validated());
-        return redirect()->route('assuntos.index');
+        return redirect()->route('assuntos.index')->with('success', 'Assunto atualizado com sucesso.');
     }
 
     public function destroy($id)
     {
         $assunto = $this->assuntoService->getAssuntoById($id);
         $this->assuntoService->deleteAssunto($assunto);
-        return redirect()->route('assuntos.index');
+        return redirect()->route('assuntos.index')->with('success', 'Assunto excluído com sucesso.');
     }
 }

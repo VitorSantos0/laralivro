@@ -33,7 +33,7 @@ class LivroController extends Controller
     public function store(LivroRequest $request)
     {
         $this->livroService->createLivro($request->validated());
-        return redirect()->route('livros.index');
+        return redirect()->route('livros.index')->with('success', 'Livro cadastrado com sucesso.');
     }
 
     public function edit($id)
@@ -48,13 +48,13 @@ class LivroController extends Controller
     {
         $livro = $this->livroService->getLivroById($id);
         $this->livroService->updateLivro($livro, $request->validated());
-        return redirect()->route('livros.index');
+        return redirect()->route('livros.index')->with('success', 'Livro atualizado com sucesso.');
     }
 
     public function destroy($id)
     {
         $livro = $this->livroService->getLivroById($id);
         $this->livroService->deleteLivro($livro);
-        return redirect()->route('livros.index');
+        return redirect()->route('livros.index')->with('success', 'Livro excluído com sucesso.');
     }
 }

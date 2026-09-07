@@ -26,7 +26,7 @@ class AutorController extends Controller
     public function store(AutorRequest $request)
     {
         $this->autorService->createAutor($request->validated());
-        return redirect()->route('autores.index');
+        return redirect()->route('autores.index')->with('success', 'Autor cadastrado com sucesso.');
     }
 
     public function edit($id)
@@ -38,12 +38,12 @@ class AutorController extends Controller
     public function update(AutorRequest $request, $id)
     {
         $this->autorService->updateAutor($id, $request->validated());
-        return redirect()->route('autores.index');
+        return redirect()->route('autores.index')->with('success', 'Autor atualizado com sucesso.');
     }
 
     public function destroy($id)
     {
         $this->autorService->deleteAutor($id);
-        return redirect()->route('autores.index');
+        return redirect()->route('autores.index')->with('success', 'Autor excluído com sucesso.');
     }
 }
