@@ -9,7 +9,7 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
-            <a class="navbar-brand" href="{{ route('home') }}">Livraria</a>
+            <a class="navbar-brand" href="{{ route('home') }}">LaraLivro</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -18,6 +18,7 @@
                     <li class="nav-item"><a class="nav-link" href="{{ route('livros.index') }}">Livros</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ route('autores.index') }}">Autores</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ route('assuntos.index') }}">Assuntos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('relatorios.index') }}">Relatórios</a></li>
                 </ul>
             </div>
         </div>

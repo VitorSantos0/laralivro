@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AutorController;
 use App\Http\Controllers\LivroController;
 use App\Http\Controllers\AssuntoController;
+use App\Http\Controllers\RelatorioController;
 
 Route::view('/', 'index')->name('home');
 
@@ -28,3 +29,7 @@ Route::post('/assuntos', [AssuntoController::class, 'store'])->name('assuntos.st
 Route::get('/assuntos/{assunto}/edit', [AssuntoController::class, 'edit'])->name('assuntos.edit');
 Route::put('/assuntos/{assunto}', [AssuntoController::class, 'update'])->name('assuntos.update');
 Route::delete('/assuntos/{assunto}', [AssuntoController::class, 'destroy'])->name('assuntos.destroy');
+
+Route::get('/relatorios', [RelatorioController::class, 'index'])->name('relatorios.index');
+Route::get('/relatorios/livros-por-autor', [RelatorioController::class, 'livrosPorAutor'])->name('relatorios.livros-por-autor');
+Route::get('/relatorios/livros-por-autor/pdf', [RelatorioController::class, 'livrosPorAutorPdf'])->name('relatorios.livros-por-autor.pdf');
