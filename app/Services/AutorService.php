@@ -15,19 +15,26 @@ class AutorService
         return Autor::all();
     }
 
+    public function getAutorById(int $id)
+    {
+        return Autor::findOrFail($id);
+    }
+
     public function createAutor(array $data)
     {
         return Autor::create($data);
     }
 
-    public function updateAutor(Autor $autor, array $data)
+    public function updateAutor(int $id, array $data)
     {
+        $autor = Autor::findOrFail($id);
         $autor->update($data);
         return $autor;
     }
 
-    public function deleteAutor(Autor $autor)
+    public function deleteAutor(int $id)
     {
+        $autor = Autor::findOrFail($id);
         try {
             DB::transaction(function () use ($autor) {
                 $autor->delete();

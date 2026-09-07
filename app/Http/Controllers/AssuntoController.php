@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\AssuntoRequest;
 
-use App\Models\Assunto;
 use App\Services\AssuntoService;
 
 class AssuntoController extends Controller
@@ -30,21 +29,22 @@ class AssuntoController extends Controller
         return redirect()->route('assuntos.index');
     }
 
-    public function edit(Assunto $assunto)
+    public function edit($id)
     {
+        $assunto = $this->assuntoService->getAssuntoById($id);
         return view('assuntos.edit', compact('assunto'));
     }
 
     public function update(AssuntoRequest $request, $id)
     {
-        $assunto = Assunto::findOrFail($id);
+        $assunto = $this->assuntoService->getAssuntoById($id);
         $this->assuntoService->updateAssunto($assunto, $request->validated());
         return redirect()->route('assuntos.index');
     }
 
     public function destroy($id)
     {
-        $assunto = Assunto::findOrFail($id);
+        $assunto = $this->assuntoService->getAssuntoById($id);
         $this->assuntoService->deleteAssunto($assunto);
         return redirect()->route('assuntos.index');
     }

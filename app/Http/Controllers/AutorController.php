@@ -2,11 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
 use App\Http\Requests\AutorRequest;
 
-use App\Models\Autor;
 use App\Services\AutorService;
 
 class AutorController extends Controller
@@ -32,22 +29,21 @@ class AutorController extends Controller
         return redirect()->route('autores.index');
     }
 
-    public function edit(Autor $autor)
+    public function edit($id)
     {
+        $autor = $this->autorService->getAutorById($id);
         return view('autores.edit', compact('autor'));
     }
 
     public function update(AutorRequest $request, $id)
     {
-        $autor = Autor::findOrFail($id);
-        $this->autorService->updateAutor($autor, $request->validated());
+        $this->autorService->updateAutor($id, $request->validated());
         return redirect()->route('autores.index');
     }
 
     public function destroy($id)
     {
-        $autor = Autor::findOrFail($id);
-        $this->autorService->deleteAutor($autor);
+        $this->autorService->deleteAutor($id);
         return redirect()->route('autores.index');
     }
 }

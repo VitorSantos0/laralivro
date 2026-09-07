@@ -15,6 +15,11 @@ class AssuntoService
         return Assunto::all();
     }
 
+    public function getAssuntoById(int $id)
+    {
+        return Assunto::findOrFail($id);
+    }
+
     public function createAssunto(array $data)
     {
         return Assunto::create($data);
