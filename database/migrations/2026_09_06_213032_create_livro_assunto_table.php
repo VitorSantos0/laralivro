@@ -17,8 +17,8 @@ return new class extends Migration
 
             $table->primary(['livro_codl', 'assunto_codas']);
 
-            $table->foreign('livro_codl')->references('codl')->on('livro')->onDelete('cascade');
-            $table->foreign('assunto_codas')->references('codas')->on('assunto')->onDelete('cascade');
+            $table->foreign('livro_codl')->references('codl')->on('livro')->onDelete('restrict');
+            $table->foreign('assunto_codas')->references('codas')->on('assunto')->onDelete('restrict');
         });
     }
 
