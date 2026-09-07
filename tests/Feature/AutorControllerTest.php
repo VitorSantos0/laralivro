@@ -117,6 +117,7 @@ class AutorControllerTest extends TestCase
 
         $response = $this->delete(route('autores.destroy', $autor));
 
+        $response->assertSessionHas('error', 'Este autor(a) está vinculado a um ou mais livros.');
         $this->assertDatabaseHas('autor', [
             'codau' => $autor->codau,
         ]);

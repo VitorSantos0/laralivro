@@ -34,7 +34,7 @@ class AutorService
             });
         } catch (QueryException $e) {
             if ($e->getCode() === '23503') {
-                throw new RegistroVinculadoException('Este autor está vinculado a um ou mais livros.');
+                throw new RegistroVinculadoException('Este autor(a) está vinculado a um ou mais livros.');
             }
             throw $e;
         }

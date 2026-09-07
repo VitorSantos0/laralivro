@@ -101,6 +101,7 @@ class AssuntoControllerTest extends TestCase
 
         $response = $this->delete(route('assuntos.destroy', $assunto));
 
+        $response->assertSessionHas('error', 'Este assunto está vinculado a um ou mais livros.');
         $this->assertDatabaseHas('assunto', [
             'codas' => $assunto->codas,
         ]);

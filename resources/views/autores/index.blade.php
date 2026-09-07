@@ -26,7 +26,7 @@
                             <td class="text-end">
                                 <a href="{{ route('autores.edit', $autor) }}" class="btn btn-sm btn-outline-secondary">Editar</a>
                                 <form action="{{ route('autores.destroy', $autor) }}" method="POST" class="d-inline"
-                                      onsubmit="return confirm('Tem certeza que deseja excluir este autor?');">
+                                      onsubmit="return confirm('Tem certeza que deseja excluir este autor(a)?');">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-sm btn-outline-danger">Excluir</button>
