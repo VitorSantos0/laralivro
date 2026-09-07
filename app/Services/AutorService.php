@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Exceptions\AutorVinculadoException;
+use App\Exceptions\RegistroVinculadoException;
 use App\Models\Autor;
 
 use Illuminate\Database\QueryException;
@@ -34,7 +34,7 @@ class AutorService
             });
         } catch (QueryException $e) {
             if ($e->getCode() === '23503') {
-                throw new AutorVinculadoException('Este autor está vinculado a um ou mais livros.');
+                throw new RegistroVinculadoException('Este autor está vinculado a um ou mais livros.');
             }
             throw $e;
         }

@@ -8,8 +8,11 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 
-class AutorVinculadoException extends Exception implements ShouldntReport
+class RegistroVinculadoException extends Exception implements ShouldntReport
 {
+    /**
+     * Render the exception as an HTTP response.
+     */
     public function render(Request $request): RedirectResponse|JsonResponse
     {
         if ($request->expectsJson()) {
