@@ -9,7 +9,7 @@
         @csrf
 
         <div class="mb-3">
-            <label for="descricao" class="form-label">Descrição</label>
+            <label for="descricao" class="form-label">Descrição <span class="text-danger">*</span></label>
             <input type="text"
                    class="form-control @error('descricao') is-invalid @enderror"
                    id="descricao"
