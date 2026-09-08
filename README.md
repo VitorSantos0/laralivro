@@ -11,12 +11,6 @@ Aplicação Laravel para cadastro de **Livros**, **Autores** e **Assuntos** cons
 - Laravel Dompdf
 - PHPUnit
 
-## Pré-requisitos
-
-- PHP 8.2 ou superior
-- Composer 2.x
-- PostgreSQL
-
 ## Passo a passo para implantação
 
 ```bash
@@ -67,8 +61,6 @@ php artisan test
 composer test
 ```
 
-Suíte atual: 45 testes de Feature cobrindo CRUD de Livro/Autor/Assunto, regras de validação, bloqueio de exclusão de Autor/Assunto vinculado a Livro, relacionamento N:N, e o relatório (tela HTML e exportação em PDF).
-
 ## Estrutura principal do projeto
 
 ```
@@ -90,15 +82,5 @@ tests/Feature/           # testes de Feature (TDD), incluindo tests/Feature/Rela
 ## Funcionalidades
 
 - **CRUD completo** de Livro, Autor e Assunto (Bootstrap, validação server-side com mensagens em pt-BR, checkboxes para seleção de autores/assuntos do livro, máscara de moeda em tempo real no campo Valor).
-- **Exclusão protegida**: tentar excluir um Autor ou Assunto vinculado a algum Livro é bloqueado com uma mensagem específica (`RegistroVinculadoException`, tratando o erro `23503` do PostgreSQL — violação de chave estrangeira — sem usar `catch` genérico).
-- **Relatório "Livros por Autor"** (`/relatorios`): consulta a view SQL `vw_relatorio_livros_por_autor` (criada via migration), agrupando os resultados por autor — um livro com múltiplos autores aparece uma vez em cada grupo. Disponível como tela HTML e como PDF (`/relatorios/livros-por-autor/pdf`).
-
-## Rotas principais
-
-| Rota | Descrição |
-|---|---|
-| `/` | Página inicial com acesso às telas |
-| `/livros`, `/autores`, `/assuntos` | CRUD de cada entidade |
-| `/relatorios` | Lista de relatórios disponíveis |
-| `/relatorios/livros-por-autor` | Relatório de livros agrupados por autor |
-| `/relatorios/livros-por-autor/pdf` | Exportação do relatório em PDF |
+- **Exclusão protegida**: tentar excluir um Autor ou Assunto vinculado a algum Livro é bloqueado com uma mensagem específica
+- **Relatório "Livros por Autor"** (`/relatorios`): consulta a view SQL `vw_relatorio_livros_por_autor` agrupando os resultados por autor
