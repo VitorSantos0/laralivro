@@ -1,6 +1,6 @@
 # LaraLivro — Gerenciamento de Livraria
 
-Aplicação Laravel para cadastro de **Livros**, **Autores** e **Assuntos** construído de forma incremental e orientada a testes.
+Projeot de cadastro de livros desenvolvido em Laravel + PostgreSQL, TDD e relatório gerencial agrupado por autor.
 
 ## Stack
 
@@ -45,7 +45,7 @@ php artisan serve
 
 A aplicação estará disponível em `http://127.0.0.1:8000`.
 
-### Resetar o banco do zero
+### Resetar o banco com as seeders
 
 ```bash
 php artisan migrate:fresh --seed
@@ -53,7 +53,7 @@ php artisan migrate:fresh --seed
 
 ## Rodando os testes
 
-Os testes de Feature usam `RefreshDatabase` e rodam contra o **mesmo banco PostgreSQL** configurado no `.env` (a suíte migra e limpa as tabelas automaticamente a cada execução — não é necessário um banco `sqlite` separado).
+Os testes de Feature usam `RefreshDatabase` e rodam contra o **mesmo banco PostgreSQL** configurado no `.env`.
 
 ```bash
 php artisan test
@@ -69,14 +69,14 @@ app/
   Http/Requests/        # AutorRequest, AssuntoRequest, LivroRequest (validação)
   Services/             # AutorService, AssuntoService, LivroService, RelatorioService (regras de negócio)
   Models/                # Autor, Assunto, Livro, LivroAutor, LivroAssunto
-  Exceptions/            # RegistroVinculadoException (violação de FK 23503 tratada especificamente)
+  Exceptions/            # RegistroVinculadoException (violação de FK tratada especificamente para o postgres)
 database/
   migrations/            # schema das tabelas + criação da view vw_relatorio_livros_por_autor
   seeders/               # dados de exemplo (autores, assuntos, livros já relacionados)
 resources/views/
   livros/, autores/, assuntos/   # CRUD de cada entidade
-  relatorios/                     # tela do relatório + view PDF-friendly
-tests/Feature/           # testes de Feature (TDD), incluindo tests/Feature/Relatorio
+  relatorios/                     # tela do relatório + view PDF
+tests/Feature/           # testes de Feature (TDD) e Relatorio
 ```
 
 ## Funcionalidades
