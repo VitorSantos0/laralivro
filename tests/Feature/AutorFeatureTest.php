@@ -11,7 +11,7 @@ use App\Models\Livro;
 
 use PHPUnit\Framework\Attributes\Test;
 
-class AutorControllerTest extends TestCase
+class AutorFeatureTest extends TestCase
 {
     use RefreshDatabase;
 

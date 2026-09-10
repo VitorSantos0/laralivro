@@ -10,7 +10,7 @@ use App\Models\Livro;
 
 use PHPUnit\Framework\Attributes\Test;
 
-class AssuntoControllerTest extends TestCase
+class AssuntoFeatureTest extends TestCase
 {
     use RefreshDatabase;
 

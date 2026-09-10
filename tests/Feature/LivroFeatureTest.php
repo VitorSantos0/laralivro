@@ -11,7 +11,7 @@ use App\Models\Livro;
 
 use PHPUnit\Framework\Attributes\Test;
 
-class LivroControllerTest extends TestCase
+class LivroFeatureTest extends TestCase
 {
     use RefreshDatabase;
 
