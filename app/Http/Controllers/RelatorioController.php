@@ -2,16 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\RelatorioService;
-
 use Barryvdh\DomPDF\Facade\Pdf;
+
+use Illuminate\Support\Facades\DB;
 
 class RelatorioController extends Controller
 {
-    public function __construct(protected RelatorioService $relatorioService)
-    {
-    }
-
     public function index()
     {
         return view('relatorios.index');
@@ -19,13 +15,18 @@ class RelatorioController extends Controller
 
     public function livrosPorAutor()
     {
-        $livrosPorAutor = $this->relatorioService->getLivrosPorAutor();
+        $livrosPorAutor = DB::table('vw_relatorio_livros_por_autor')
+            ->get()
+            ->groupBy('autor');
+
         return view('relatorios.livros-por-autor', compact('livrosPorAutor'));
     }
 
     public function livrosPorAutorPdf()
     {
-        $livrosPorAutor = $this->relatorioService->getLivrosPorAutor();
+        $livrosPorAutor = DB::table('vw_relatorio_livros_por_autor')
+            ->get()
+            ->groupBy('autor');
 
         $pdf = Pdf::loadView('relatorios.livros-por-autor-pdf', compact('livrosPorAutor'));
 
