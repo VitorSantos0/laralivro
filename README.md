@@ -1,6 +1,6 @@
 # LaraLivro — Gerenciamento de Livraria
 
-Projeot de cadastro de livros desenvolvido em Laravel + PostgreSQL, TDD e relatório gerencial agrupado por autor.
+Projeto de cadastro de livros desenvolvido em Laravel + PostgreSQL, com CRUD completo de Livros, Autores e Assuntos, aplicando TDD, arquitetura em camadas MVC e relatório gerencial agrupado por autor.
 
 ## Stack
 
