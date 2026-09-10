@@ -61,24 +61,6 @@ php artisan test
 composer test
 ```
 
-## Estrutura principal do projeto
-
-```
-app/
-  Http/Controllers/     # AutorController, AssuntoController, LivroController, RelatorioController
-  Http/Requests/        # AutorRequest, AssuntoRequest, LivroRequest (validação)
-  Services/             # AutorService, AssuntoService, LivroService, RelatorioService (regras de negócio)
-  Models/                # Autor, Assunto, Livro, LivroAutor, LivroAssunto
-  Exceptions/            # RegistroVinculadoException (violação de FK tratada especificamente para o postgres)
-database/
-  migrations/            # schema das tabelas + criação da view vw_relatorio_livros_por_autor
-  seeders/               # dados de exemplo (autores, assuntos, livros já relacionados)
-resources/views/
-  livros/, autores/, assuntos/   # CRUD de cada entidade
-  relatorios/                     # tela do relatório + view PDF
-tests/Feature/           # testes de Feature (TDD) e Relatorio
-```
-
 ## Funcionalidades
 
 - **CRUD completo** de Livro, Autor e Assunto (Bootstrap, validação server-side com mensagens em pt-BR, checkboxes para seleção de autores/assuntos do livro, máscara de moeda em tempo real no campo Valor).
