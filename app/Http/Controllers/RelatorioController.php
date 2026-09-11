@@ -15,21 +15,24 @@ class RelatorioController extends Controller
 
     public function livrosPorAutor()
     {
-        $livrosPorAutor = DB::table('vw_relatorio_livros_por_autor')
-            ->get()
-            ->groupBy('autor');
+        $livrosPorAutor = $this->livrosPorAutorAgrupados();
 
         return view('relatorios.livros-por-autor', compact('livrosPorAutor'));
     }
 
     public function livrosPorAutorPdf()
     {
-        $livrosPorAutor = DB::table('vw_relatorio_livros_por_autor')
-            ->get()
-            ->groupBy('autor');
+        $livrosPorAutor = $this->livrosPorAutorAgrupados();
 
         $pdf = Pdf::loadView('relatorios.livros-por-autor-pdf', compact('livrosPorAutor'));
 
         return $pdf->download('relatorio-livros-por-autor.pdf');
+    }
+
+    private function livrosPorAutorAgrupados()
+    {
+        return DB::table('vw_relatorio_livros_por_autor')
+            ->get()
+            ->groupBy('autor');
     }
 }

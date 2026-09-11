@@ -40,6 +40,24 @@ class LivroAutorRelationshipTest extends TestCase
     }
 
     #[Test]
+    public function getKeyName_do_pivot_respeita_o_contrato_do_eloquent(): void
+    {
+        $vinculo = LivroAutor::create([
+            'livro_codl' => Livro::create([
+                'titulo' => 'Dom Casmurro',
+                'editora' => 'Editora X',
+                'edicao' => 1,
+                'ano_publicacao' => 1899,
+                'valor' => 39.90,
+            ])->codl,
+            'autor_codau' => Autor::create(['nome' => 'Machado de Assis'])->codau,
+        ]);
+
+        $this->assertIsString($vinculo->getKeyName());
+        $this->assertNull($vinculo->getKey());
+    }
+
+    #[Test]
     public function consegue_remover_um_vinculo_entre_autor_e_livro(): void
     {
         $autor = Autor::create(['nome' => 'Machado de Assis']);

@@ -3,18 +3,23 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-
-use App\Concerns\HasCompositePrimaryKey;
+use Illuminate\Database\Eloquent\Relations\Concerns\AsPivot;
 
 class LivroAutor extends Model
 {
-    use HasCompositePrimaryKey;
-    
+    use AsPivot;
+
     protected $table = 'livro_autor';
-    protected $primaryKey = ['livro_codl', 'autor_codau'];
 
     public $incrementing = false;
     public $timestamps = false;
 
     protected $fillable = ['livro_codl', 'autor_codau'];
+
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+
+        $this->setPivotKeys('livro_codl', 'autor_codau');
+    }
 }
