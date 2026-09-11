@@ -1,6 +1,6 @@
 # LaraLivro — Gerenciamento de Livraria
 
-Projeto de cadastro de livros desenvolvido em Laravel + PostgreSQL, com CRUD completo de Livros, Autores e Assuntos, aplicando TDD, arquitetura em camadas (Controller → Service → Repository) orientada pelos princípios SOLID.
+Projeto de cadastro de livros desenvolvido em Laravel + PostgreSQL, com CRUD completo de Livros, Autores e Assuntos, cobertura de testes em camadas (unidade + integração), arquitetura em camadas (Controller → Service → Repository) orientada pelos princípios SOLID.
 
 ## Stack
 
@@ -66,12 +66,18 @@ php artisan migrate:fresh --seed
 
 ## Rodando os testes
 
-Os testes de Feature usam `RefreshDatabase` e rodam contra o **mesmo banco PostgreSQL** configurado no `.env`.
+O projeto tem duas suítes com propósitos diferentes:
+
+- **`tests/Unit`** (Controllers e Services): mockam `*ServiceInterface`/`*RepositoryInterface` com Mockery — não usam `RefreshDatabase` nem precisam de Postgres rodando. Isso só é possível porque Controllers e Services dependem de interfaces (DIP), então a implementação real é trocada por um dublê de teste no container. `php artisan test --testsuite=Unit` roda em menos de 1s.
+- **`tests/Feature`** (`*FeatureTest.php` e `*RelationshipTest.php`): testes de integração ponta a ponta, usam `RefreshDatabase` contra o **mesmo banco PostgreSQL** configurado no `.env`. Cobrem o que fica fora das camadas Service/Repository e não dá para mockar: a regra de validação `exists:` do `LivroRequest` (consulta real ao banco) e o código de erro `23503` do Postgres na exclusão protegida.
 
 ```bash
 php artisan test
 # ou
 composer test
+
+# só a suíte sem banco
+php artisan test --testsuite=Unit
 ```
 
 ## Funcionalidades
