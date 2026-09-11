@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Repositories\AssuntoListInterface;
 use App\Repositories\AssuntoRepositoryInterface;
+use App\Repositories\AutorListInterface;
 use App\Repositories\AutorRepositoryInterface;
 use App\Repositories\Eloquent\EloquentAssuntoRepository;
 use App\Repositories\Eloquent\EloquentAutorRepository;
@@ -26,6 +28,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(AutorRepositoryInterface::class, EloquentAutorRepository::class);
         $this->app->bind(AssuntoRepositoryInterface::class, EloquentAssuntoRepository::class);
         $this->app->bind(LivroRepositoryInterface::class, EloquentLivroRepository::class);
+        $this->app->bind(AutorListInterface::class, EloquentAutorRepository::class);
+        $this->app->bind(AssuntoListInterface::class, EloquentAssuntoRepository::class);
 
         $this->app->bind(AutorServiceInterface::class, AutorService::class);
         $this->app->bind(AssuntoServiceInterface::class, AssuntoService::class);

@@ -3,12 +3,9 @@
 namespace App\Repositories;
 
 use App\Models\Assunto;
-use Illuminate\Database\Eloquent\Collection;
 
-interface AssuntoRepositoryInterface
+interface AssuntoRepositoryInterface extends AssuntoListInterface
 {
-    public function all(): Collection;
-
     public function findOrFail(int $id): Assunto;
 
     public function create(array $data): Assunto;

@@ -3,8 +3,8 @@
 namespace App\Services;
 
 use App\Models\Livro;
-use App\Repositories\AssuntoRepositoryInterface;
-use App\Repositories\AutorRepositoryInterface;
+use App\Repositories\AssuntoListInterface;
+use App\Repositories\AutorListInterface;
 use App\Repositories\LivroRepositoryInterface;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -12,8 +12,8 @@ class LivroService extends Service implements LivroServiceInterface
 {
     public function __construct(
         private readonly LivroRepositoryInterface $repository,
-        private readonly AutorRepositoryInterface $autorRepository,
-        private readonly AssuntoRepositoryInterface $assuntoRepository,
+        private readonly AutorListInterface $autorRepository,
+        private readonly AssuntoListInterface $assuntoRepository,
     ) {
     }
 
