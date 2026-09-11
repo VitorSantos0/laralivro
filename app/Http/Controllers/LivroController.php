@@ -6,11 +6,14 @@ use App\Http\Requests\LivroRequest;
 use App\Models\Assunto;
 use App\Models\Autor;
 use App\Models\Livro;
-
-use Illuminate\Support\Facades\DB;
+use App\Services\LivroService;
 
 class LivroController extends Controller
 {
+    public function __construct(private readonly LivroService $livroService)
+    {
+    }
+
     public function index()
     {
         $livros = Livro::with(['autores', 'assuntos'])->get();
@@ -26,14 +29,7 @@ class LivroController extends Controller
 
     public function store(LivroRequest $request)
     {
-        $data = $request->validated();
-
-        DB::transaction(function () use ($data) {
-            $livro = Livro::create($data);
-            $livro->autores()->sync($data['autores']);
-            $livro->assuntos()->sync($data['assuntos']);
-        });
-
+        $this->livroService->create($request->validated());
         return redirect()->route('livros.index')->with('success', 'Livro cadastrado com sucesso.');
     }
 
@@ -48,27 +44,14 @@ class LivroController extends Controller
     public function update(LivroRequest $request, $id)
     {
         $livro = Livro::with(['autores', 'assuntos'])->findOrFail($id);
-        $data = $request->validated();
-
-        DB::transaction(function () use ($livro, $data) {
-            $livro->update($data);
-            $livro->autores()->sync($data['autores']);
-            $livro->assuntos()->sync($data['assuntos']);
-        });
-
+        $this->livroService->update($livro, $request->validated());
         return redirect()->route('livros.index')->with('success', 'Livro atualizado com sucesso.');
     }
 
     public function destroy($id)
     {
         $livro = Livro::with(['autores', 'assuntos'])->findOrFail($id);
-
-        DB::transaction(function () use ($livro) {
-            $livro->autores()->detach();
-            $livro->assuntos()->detach();
-            $livro->delete();
-        });
-
+        $this->livroService->delete($livro);
         return redirect()->route('livros.index')->with('success', 'Livro excluído com sucesso.');
     }
 }

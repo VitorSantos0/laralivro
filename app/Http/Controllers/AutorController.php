@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Exceptions\RegistroVinculadoException;
 use App\Http\Requests\AutorRequest;
 use App\Models\Autor;
-
-use Illuminate\Database\QueryException;
-use Illuminate\Support\Facades\DB;
+use App\Services\AutorService;
 
 class AutorController extends Controller
 {
+    public function __construct(private readonly AutorService $autorService)
+    {
+    }
+
     public function index()
     {
         $autores = Autor::all();
@@ -24,7 +25,7 @@ class AutorController extends Controller
 
     public function store(AutorRequest $request)
     {
-        Autor::create($request->validated());
+        $this->autorService->create($request->validated());
         return redirect()->route('autores.index')->with('success', 'Autor cadastrado com sucesso.');
     }
 
@@ -37,25 +38,14 @@ class AutorController extends Controller
     public function update(AutorRequest $request, $id)
     {
         $autor = Autor::findOrFail($id);
-        $autor->update($request->validated());
+        $this->autorService->update($autor, $request->validated());
         return redirect()->route('autores.index')->with('success', 'Autor atualizado com sucesso.');
     }
 
     public function destroy($id)
     {
         $autor = Autor::findOrFail($id);
-
-        try {
-            DB::transaction(function () use ($autor) {
-                $autor->delete();
-            });
-        } catch (QueryException $e) {
-            if ($e->getCode() === '23503') {
-                throw new RegistroVinculadoException('Este autor(a) está vinculado a um ou mais livros.');
-            }
-            throw $e;
-        }
-
+        $this->autorService->delete($autor);
         return redirect()->route('autores.index')->with('success', 'Autor excluído com sucesso.');
     }
 }

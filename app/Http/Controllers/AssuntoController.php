@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Exceptions\RegistroVinculadoException;
 use App\Http\Requests\AssuntoRequest;
 use App\Models\Assunto;
-
-use Illuminate\Database\QueryException;
-use Illuminate\Support\Facades\DB;
+use App\Services\AssuntoService;
 
 class AssuntoController extends Controller
 {
+    public function __construct(private readonly AssuntoService $assuntoService)
+    {
+    }
+
     public function index()
     {
         $assuntos = Assunto::all();
@@ -24,7 +25,7 @@ class AssuntoController extends Controller
 
     public function store(AssuntoRequest $request)
     {
-        Assunto::create($request->validated());
+        $this->assuntoService->create($request->validated());
         return redirect()->route('assuntos.index')->with('success', 'Assunto cadastrado com sucesso.');
     }
 
@@ -37,25 +38,14 @@ class AssuntoController extends Controller
     public function update(AssuntoRequest $request, $id)
     {
         $assunto = Assunto::findOrFail($id);
-        $assunto->update($request->validated());
+        $this->assuntoService->update($assunto, $request->validated());
         return redirect()->route('assuntos.index')->with('success', 'Assunto atualizado com sucesso.');
     }
 
     public function destroy($id)
     {
         $assunto = Assunto::findOrFail($id);
-
-        try {
-            DB::transaction(function () use ($assunto) {
-                $assunto->delete();
-            });
-        } catch (QueryException $e) {
-            if ($e->getCode() === '23503') {
-                throw new RegistroVinculadoException('Este assunto está vinculado a um ou mais livros.');
-            }
-            throw $e;
-        }
-
+        $this->assuntoService->delete($assunto);
         return redirect()->route('assuntos.index')->with('success', 'Assunto excluído com sucesso.');
     }
 }
