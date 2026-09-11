@@ -3,18 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\AssuntoRequest;
-use App\Models\Assunto;
-use App\Services\AssuntoService;
+use App\Services\AssuntoServiceInterface;
 
 class AssuntoController extends Controller
 {
-    public function __construct(private readonly AssuntoService $assuntoService)
+    public function __construct(private readonly AssuntoServiceInterface $assuntoService)
     {
     }
 
     public function index()
     {
-        $assuntos = Assunto::all();
+        $assuntos = $this->assuntoService->all();
         return view('assuntos.index', compact('assuntos'));
     }
 
@@ -31,20 +30,20 @@ class AssuntoController extends Controller
 
     public function edit($id)
     {
-        $assunto = Assunto::findOrFail($id);
+        $assunto = $this->assuntoService->findOrFail($id);
         return view('assuntos.edit', compact('assunto'));
     }
 
     public function update(AssuntoRequest $request, $id)
     {
-        $assunto = Assunto::findOrFail($id);
+        $assunto = $this->assuntoService->findOrFail($id);
         $this->assuntoService->update($assunto, $request->validated());
         return redirect()->route('assuntos.index')->with('success', 'Assunto atualizado com sucesso.');
     }
 
     public function destroy($id)
     {
-        $assunto = Assunto::findOrFail($id);
+        $assunto = $this->assuntoService->findOrFail($id);
         $this->assuntoService->delete($assunto);
         return redirect()->route('assuntos.index')->with('success', 'Assunto excluído com sucesso.');
     }
