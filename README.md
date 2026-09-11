@@ -1,6 +1,6 @@
 # LaraLivro — Gerenciamento de Livraria
 
-Projeto de cadastro de livros desenvolvido em Laravel + PostgreSQL, com CRUD completo de Livros, Autores e Assuntos, aplicando TDD, arquitetura em camadas MVC e relatório gerencial agrupado por autor.
+Projeto de cadastro de livros desenvolvido em Laravel + PostgreSQL, com CRUD completo de Livros, Autores e Assuntos, aplicando TDD, arquitetura em camadas (Controller → Service → Repository) orientada pelos princípios SOLID.
 
 ## Stack
 
@@ -10,6 +10,19 @@ Projeto de cadastro de livros desenvolvido em Laravel + PostgreSQL, com CRUD com
 - Bootstrap 5.3.3
 - Laravel Dompdf
 - PHPUnit
+
+## Arquitetura
+
+O projeto segue uma arquitetura em camadas, todas ligadas por interface:
+
+```
+Controller → ServiceInterface → RepositoryInterface → Eloquent Model
+```
+
+- **Controllers** (`app/Http/Controllers`) só orquestram request → service → resposta HTTP. Não acessam Eloquent nem a facade `DB` diretamente.
+- **Services** (`app/Services`) concentram a regra de negócio: transação, tradução de erro de FK do Postgres (`QueryException` código `23503`) em `RegistroVinculadoException`, e orquestração de operações compostas (ex.: criar um Livro e sincronizar autores/assuntos na mesma transação). A classe abstrata `Service` centraliza o helper `transactional()`, reaproveitado por `AutorService`, `AssuntoService` e `LivroService`.
+- **Repositories** (`app/Repositories`, implementações em `app/Repositories/Eloquent`) isolam o acesso a dados — são as únicas classes que falam diretamente com o Eloquent.
+- Toda dependência entre camadas é injetada por construtor via **interface**, resolvida no container em `app/Providers/AppServiceProvider.php`. Não há `new` de colaboradores nem chamada estática de Model dentro de Controller/Service.
 
 ## Passo a passo para implantação
 
