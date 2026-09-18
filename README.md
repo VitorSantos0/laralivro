@@ -24,60 +24,64 @@ Controller → ServiceInterface → RepositoryInterface → Eloquent Model
 - **Repositories** (`app/Repositories`, implementações em `app/Repositories/Eloquent`) isolam o acesso a dados — são as únicas classes que falam diretamente com o Eloquent.
 - Toda dependência entre camadas é injetada por construtor via **interface**, resolvida no container em `app/Providers/AppServiceProvider.php`. Não há `new` de colaboradores nem chamada estática de Model dentro de Controller/Service.
 
-## Passo a passo para implantação
+## Implantação com Docker (Laravel Sail)
+
+Pré-requisito: Docker instalado e rodando (no Windows, Docker Desktop com integração WSL habilitada para a distro em uso).
 
 ```bash
-# 1. Instalar as dependências PHP
-composer install
+# 1. Instalar as dependências PHP (não precisa de PHP instalado na máquina host)
+docker run --rm -u "$(id -u):$(id -g)" -v "$(pwd):/var/www/html" -w /var/www/html \
+  laravelsail/php84-composer:latest composer install
 
 # 2. Copiar o arquivo de variáveis de ambiente
 cp .env.example .env
 
-# 3. Gerar a chave da aplicação
-php artisan key:generate
+# 3. Subir os containers (app + PostgreSQL)
+./vendor/bin/sail up -d
 
-# 4. Configurar o acesso ao PostgreSQL no .env
-#    DB_CONNECTION=pgsql
-#    DB_HOST=127.0.0.1
-#    DB_PORT=5432
-#    DB_DATABASE=livraria
-#    DB_USERNAME=postgres
-#    DB_PASSWORD=postgres
-#    (crie o banco "livraria" antes de migrar, caso ainda não exista)
+# 4. Gerar a chave da aplicação
+./vendor/bin/sail artisan key:generate
 
 # 5. Rodar as migrations (cria as tabelas autor, livro, assunto,
 #    livro_autor, livro_assunto e a view vw_relatorio_livros_por_autor)
-php artisan migrate
+./vendor/bin/sail artisan migrate
 
 # 6. (Opcional) Popular dados de exemplo
-php artisan db:seed
+./vendor/bin/sail artisan db:seed
 
-# 7. Subir o servidor de desenvolvimento
-php artisan serve
+# 7. Instalar dependências JS e buildar os assets
+./vendor/bin/sail npm install
+./vendor/bin/sail npm run build
 ```
 
-A aplicação estará disponível em `http://127.0.0.1:8000`.
+A aplicação estará disponível em `http://localhost`.
 
-### Resetar o banco com as seeders
+### Scripts do dia a dia
 
 ```bash
-php artisan migrate:fresh --seed
+./vendor/bin/sail up -d              # subir os containers em background
+./vendor/bin/sail down               # derrubar os containers
+./vendor/bin/sail down -v            # derrubar e apagar o volume do banco (reset total)
+./vendor/bin/sail logs -f            # acompanhar logs em tempo real
+./vendor/bin/sail artisan migrate:fresh --seed   # resetar o banco com as seeders
+./vendor/bin/sail npm run dev        # Vite com hot-reload (porta 5173)
+./vendor/bin/sail composer <cmd>     # rodar composer dentro do container
 ```
 
 ## Rodando os testes
 
 O projeto tem duas suítes com propósitos diferentes:
 
-- **`tests/Unit`** (Controllers e Services): mockam `*ServiceInterface`/`*RepositoryInterface` com Mockery — não usam `RefreshDatabase` nem precisam de Postgres rodando. Isso só é possível porque Controllers e Services dependem de interfaces (DIP), então a implementação real é trocada por um dublê de teste no container. `php artisan test --testsuite=Unit` roda em menos de 1s.
+- **`tests/Unit`** (Controllers e Services): mockam `*ServiceInterface`/`*RepositoryInterface` com Mockery — não usam `RefreshDatabase` nem precisam de Postgres rodando. Isso só é possível porque Controllers e Services dependem de interfaces (DIP), então a implementação real é trocada por um dublê de teste no container. `sail artisan test --testsuite=Unit` roda em menos de 1s.
 - **`tests/Feature`** (`*FeatureTest.php` e `*RelationshipTest.php`): testes de integração ponta a ponta, usam `RefreshDatabase` contra o **mesmo banco PostgreSQL** configurado no `.env`. Cobrem o que fica fora das camadas Service/Repository e não dá para mockar: a regra de validação `exists:` do `LivroRequest` (consulta real ao banco) e o código de erro `23503` do Postgres na exclusão protegida.
 
 ```bash
-php artisan test
+./vendor/bin/sail artisan test
 # ou
-composer test
+./vendor/bin/sail composer test
 
 # só a suíte sem banco
-php artisan test --testsuite=Unit
+./vendor/bin/sail artisan test --testsuite=Unit
 ```
 
 ## Funcionalidades
