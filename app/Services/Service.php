@@ -7,6 +7,8 @@ use Closure;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
 
+use App\Enums\PostgresErrorCode;
+
 abstract class Service
 {
     /**
@@ -18,7 +20,7 @@ abstract class Service
         try {
             return DB::transaction($callback);
         } catch (QueryException $e) {
-            if ($conflictMessage !== null && $e->getCode() === '23503') {
+            if ($conflictMessage !== null && in_array($e->getCode(), PostgresErrorCode::violacoesDeVinculo())) {
                 throw new RegistroVinculadoException($conflictMessage);
             }
             throw $e;
